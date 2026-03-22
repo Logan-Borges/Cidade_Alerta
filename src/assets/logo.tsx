@@ -12,3 +12,4 @@ export const LogoCidadeAlerta = ({ size = 24, color = "#000000" }) => {
         </defs>
     </svg>);
 };
+

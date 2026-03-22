@@ -1,11 +1,20 @@
-main,
-body {
-    margin: 0;
-    padding: 0;
+html, body, #root {
+  height: 100%;
+  margin: 0;
 }
 
 :root {
     --bg-navbar-color: #1e3652;
     --primary-button-color: #ef671f;
     --logo-color: #3eb445;
+}
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.content {
+  flex: 1; /* empurra o footer pra baixo */
+  padding: 30px;
 }
