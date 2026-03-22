@@ -36,7 +36,7 @@ const Navbar = ({
       <div className="logo">
         <LogoCidadeAlerta
           size={40}
-          color="#3eb445"
+          color="#e7eb0b"
         />
         {logoText}
       </div>
