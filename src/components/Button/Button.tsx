@@ -1,16 +1,10 @@
 import "./Button.css";
 
-interface ButtonProps {
-  text: string;
-  task: () => void;
-  fullWidth?: boolean;
-}
-
-const Button = ({ text, task, fullWidth }: ButtonProps) => {
+const Button = ({ text, task }) => {
   return (
     <button
       onClick={() => task()}
-      className={`primary ${fullWidth ? "full-width" : ""}`}
+      className="primary"
     >
       {text}
     </button>
