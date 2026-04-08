@@ -1,29 +1,33 @@
 import { useState } from "react"
 import Button from "../../components/Button/Button"
+import Alert from "../../components/Alert/Alert"
 import { UserService, LoginDTO } from "../../services/UserService"
 import { useNavigate } from "react-router-dom"
 import "./SignIn.css"
 
 const userService = new UserService()
 
+type AlertState = {
+    type: 'success' | 'error' | 'warning' | 'info'
+    title: string
+    description?: string
+} | null
+
 const SignIn = () => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const [erro, setErro] = useState("")
-    const [loading, setLoading] = useState(false) // estado loading
+    const [loading, setLoading] = useState(false)
+    const [alert, setAlert] = useState<AlertState>(null)
     const navigate = useNavigate()
 
     const handleLogin = async () => {
-         console.log("handleLogin chamado!")
-         console.log("email:", email, "password:", password)
-
         if (!email || !password) {
-            alert("Preencha todos os campos")
+            setAlert({ type: 'warning', title: 'Preencha todos os campos', description: 'Email e senha são obrigatórios.' })
             return
         }
 
-        setLoading(true) // Ativa o loading
-        setErro("") // Limpa qualquer erro que estava na tela
+        setLoading(true)
+        setAlert(null)
 
         const dados: LoginDTO = {
             email,
@@ -33,12 +37,16 @@ const SignIn = () => {
         try {
             const usuario = await userService.login(dados)
             console.log("Logado!", usuario)
-            alert("Login realizado com sucesso!")
-            navigate('/')
+            setAlert({ type: 'success', title: 'Login realizado com sucesso!' })
+
+            // Opcional: Você pode colocar um pequeno atraso aqui antes do navigate
+            // para dar tempo do usuário ver a mensagem de sucesso verde
+            setTimeout(() => navigate('/'), 1000)
+
         } catch (error: any) {
-            setErro("Email ou senha inválidos")
+            setAlert({ type: 'error', title: 'Email ou senha inválidos', description: 'Verifique suas credenciais e tente novamente.' })
         } finally {
-            setLoading(false) // Desativa o loading
+            setLoading(false)
         }
     }
 
@@ -63,15 +71,23 @@ const SignIn = () => {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
-                    {erro && <p className="erro">{erro}</p>}
+
                     <Button
                         text="Entrar"
                         fullWidth
                         task={handleLogin}
-                        isLoading={loading} // passa o estado para dentro do Button
+                        isLoading={loading}
                     />
                 </div>
             </div>
+            {alert && (
+                <Alert
+                    type={alert.type}
+                    title={alert.title}
+                    description={alert.description}
+                    onClose={() => setAlert(null)}
+                />
+            )}
         </div>
     )
 }
