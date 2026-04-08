@@ -1,5 +1,6 @@
 import { useState } from "react"
 import Button from "../../components/Button/Button"
+import Alert from "../../components/Alert/Alert"
 import { UserService, LoginDTO } from "../../services/UserService"
 import { useNavigate } from "react-router-dom"
 import "./SignIn.css"
@@ -18,7 +19,7 @@ const SignIn = () => {
          console.log("email:", email, "password:", password)
 
         if (!email || !password) {
-            alert("Preencha todos os campos")
+            setAlert({ type: 'warning', title: 'Preencha todos os campos', description: 'Email e senha são obrigatórios.' })
             return
         }
 
@@ -49,6 +50,14 @@ const SignIn = () => {
                     <h2>Login</h2>
                 </div>
                 <div className="input-forms">
+                    {alert && (
+                        <Alert
+                            type={alert.type}
+                            title={alert.title}
+                            description={alert.description}
+                            onClose={() => setAlert(null)}
+                        />
+                    )}
                     <input
                         id="email"
                         type="email"
@@ -63,7 +72,6 @@ const SignIn = () => {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
-                    {erro && <p className="erro">{erro}</p>}
                     <Button
                         text="Entrar"
                         fullWidth
